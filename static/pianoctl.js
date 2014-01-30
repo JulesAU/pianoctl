@@ -2,6 +2,7 @@ var focused = true;
 var running = false;
 
 $(document).ready(function() {
+document.getElementById('text').focus();
   // When the form  is clicked on, don't actually submit -- just send message.
   $('#form').submit(function() {
     $.post('ajax.html', { text: $('#text').val() });
@@ -26,6 +27,15 @@ $(document).ready(function() {
     scrollToBottom();
   });
 
+  $('#volup').click(function() {
+    $.post('ajax.html', { text: ')' });
+    scrollToBottom();
+  });
+  $('#voldown').click(function() {
+    $.post('ajax.html', { text: '(' });
+    scrollToBottom();
+  });
+
   // Verify more significant commands.
   $('#love').click(function() {
     if (confirm("Are you sure you want to love the song?")) {
@@ -42,10 +52,10 @@ $(document).ready(function() {
 
 
   // Update the volume when clicked.
-  $('#volume').click(function(e) { volumeChange(e) });
-  $('#volumepos').click(function(e) { volumeChange(e) });
-  // And set the initial position.
-  $('#volumepos').css('left', $('#initialvolume').text());
+  // $('#volume').click(function(e) { volumeChange(e) });
+  // $('#volumepos').click(function(e) { volumeChange(e) });
+  // // And set the initial position.
+  // $('#volumepos').css('left', $('#initialvolume').text());
 
   // Defer waitForUpdate so android browser thinks page is fully lodaed.
   setTimeout('waitForUpdate()', '1000');
@@ -71,7 +81,8 @@ function volumeChange(e) {
 }
 
 function scrollToBottom() {
-  $('#logs').scrollTop(10000000);
+//   $('#logs').scrollTop(10000000);
+// document.getElementById('text').focus();  
 }
 
 function waitForUpdate() {

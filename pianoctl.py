@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 import os
-import osax
 import re
 import subprocess
 import time
@@ -25,7 +24,7 @@ class PandoraController:
     self.last = ''
     self.stdin = None
     self.waiting = set()
-    self.volume_handler = osax.OSAX()
+    # self.volume_handler = osax.OSAX()
     self.process = None
     self.last_event_time = time.time()
 
@@ -46,7 +45,7 @@ class PandoraController:
     http_server.listen(options.port)
 
     self.loop = tornado.ioloop.IOLoop.instance()
-    self.start_player_if_needed()
+    #self.start_player_if_needed()
 
     sleep_checker = tornado.ioloop.PeriodicCallback(self.check_if_should_sleep, 1*1000, io_loop=self.loop)
     sleep_checker.start()
@@ -61,7 +60,7 @@ class PandoraController:
   def start_player_if_needed(self):
     if self.process != None: return False
 
-    self.process = subprocess.Popen(['../pianobar/pianobar'],
+    self.process = subprocess.Popen(['/usr/local/bin/pianobar'],
                                     stdout=subprocess.PIPE,
                                     stdin=subprocess.PIPE)
     fd = self.process.stdout.fileno()
@@ -113,7 +112,7 @@ class MainHandler(tornado.web.RequestHandler):
     controller.start_player_if_needed()
 
     flattened_logs = '\n'.join(controller.logs) + '\n' + controller.recent
-    volume = controller.volume_handler.get_volume_settings()[osax.k.output_volume]
+    volume = 5;
     self.render("pianoctl.html", logs=flattened_logs, volume=volume)
 
 
@@ -157,7 +156,7 @@ class AjaxHandler(tornado.web.RequestHandler):
 class VolumeHandler(tornado.web.RequestHandler):
   def get(self):
     level = int(self.get_argument('level'))
-    controller.volume_handler.set_volume(level / 14.0)
+    # controller.volume_handler.set_volume(level / 14.0)
 
 
 def CEscape(text):
