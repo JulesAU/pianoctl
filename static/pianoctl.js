@@ -36,6 +36,12 @@ document.getElementById('text').focus();
     scrollToBottom();
   });
 
+  $('#kill').click(function() {
+    $.post('ajax.html', { text: 'q' });
+    scrollToBottom();
+  });
+
+
   // Verify more significant commands.
   $('#love').click(function() {
     if (confirm("Are you sure you want to love the song?")) {

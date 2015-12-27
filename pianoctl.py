@@ -60,7 +60,9 @@ class PandoraController:
   def start_player_if_needed(self):
     if self.process != None: return False
 
-    self.process = subprocess.Popen(['/usr/local/bin/pianobar'],
+    self.process = subprocess.Popen(['/usr/local/bin/pbar-wrapped'],
+    # self.process = subprocess.Popen(['/usr/bin/mpg123','/tmp/blah.mp3'],
+                                    stderr=subprocess.STDOUT,
                                     stdout=subprocess.PIPE,
                                     stdin=subprocess.PIPE)
     fd = self.process.stdout.fileno()
@@ -71,6 +73,7 @@ class PandoraController:
 
   def check_if_should_sleep(self):
     current_time = time.time()
+    return
 
     # Shut down pianoctl after 10 minutes.
     if (current_time - self.last_event_time) > 60 * 10:
@@ -136,6 +139,7 @@ class AjaxHandler(tornado.web.RequestHandler):
 
     if len(command) == 1 and command.isalpha():
       controller.stdin.write(command)
+      if command == 'q': exit()
     elif command == 'sleep':
       os.system('pmset sleepnow')
     else:
